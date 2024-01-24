@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PersonController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">unit-test-sample-rest</a> &gt; <a href="index.source.html" class="el_package">cl.tsoft.labs.ut.sample.rest.controller</a> &gt; <span class="el_source">PersonController.java</span></div><h1>PersonController.java</h1><pre class="source lang-java linenums">package cl.tsoft.labs.ut.sample.rest.controller;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+import cl.tsoft.labs.ut.sample.rest.controller.dto.PersonDto;
+import cl.tsoft.labs.ut.sample.rest.controller.dto.PersonMapper;
+import cl.tsoft.labs.ut.sample.rest.entitie.Person;
+import cl.tsoft.labs.ut.sample.rest.entitie.RickAndMortyCharacter;
+import cl.tsoft.labs.ut.sample.rest.entitie.type.Rut;
+import cl.tsoft.labs.ut.sample.rest.service.PersonService;
+import cl.tsoft.labs.ut.sample.rest.service.RickAndMortyService;
+import cl.tsoft.labs.ut.sample.rest.service.exception.BusinessException;
+
+@RequestScoped
+@Path(&quot;/persons&quot;)
+<span class="fc" id="L32">public class PersonController {</span>
+
+    @Inject
+    private PersonService personService;
+
+    @Inject
+    private RickAndMortyService rickAndMortyService;
+
+    @Context
+    private UriInfo uriInfo;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(&quot;/health/request-url&quot;)
+    public String getRequestUrl() {
+<span class="fc" id="L47">        return uriInfo.getRequestUri().toString();</span>
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path(&quot;/&quot;)
+    public Response createPerson(PersonDto person) {
+        try {
+<span class="fc" id="L56">            Person newPerson = PersonMapper.INSTANCE.personDtoToPerson(person);</span>
+<span class="fc" id="L57">            newPerson = personService.createPerson(newPerson);</span>
+
+<span class="fc" id="L59">            PersonDto personToResponse = PersonMapper.INSTANCE.personToPersonDto(newPerson);</span>
+<span class="fc" id="L60">            return Response</span>
+<span class="fc" id="L61">                .status(Response.Status.CREATED)</span>
+<span class="fc" id="L62">                .entity(personToResponse)</span>
+<span class="fc" id="L63">                .build();</span>
+
+<span class="fc" id="L65">        } catch (Exception e) {</span>
+<span class="fc" id="L66">            return getResponseBadRequest(e);</span>
+        }
+    }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(&quot;/{id}&quot;)
+    public Response deletePerson(@PathParam(&quot;id&quot;) Long id) {
+        try {
+<span class="fc" id="L75">            Person deletedPerson = personService.deleteById(id);</span>
+<span class="fc" id="L76">            PersonDto dto = PersonMapper.INSTANCE.personToPersonDto(deletedPerson);</span>
+
+<span class="fc" id="L78">            return Response</span>
+<span class="fc" id="L79">                .status(Response.Status.OK)</span>
+<span class="fc" id="L80">                .entity(dto)</span>
+<span class="fc" id="L81">                .build();</span>
+<span class="nc" id="L82">        } catch (BusinessException e) {</span>
+<span class="nc" id="L83">            return getResponseBadRequest(e);</span>
+        }
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path(&quot;/&quot;)
+    public Response updatePerson(PersonDto person) {
+        try {
+<span class="fc" id="L93">            Person personToUpdate = PersonMapper.INSTANCE.personDtoToPerson(person);</span>
+<span class="fc" id="L94">            personService.updatePerson(personToUpdate);</span>
+
+<span class="fc" id="L96">            return Response</span>
+<span class="fc" id="L97">                .status(Response.Status.OK)</span>
+<span class="fc" id="L98">                .entity(person)</span>
+<span class="fc" id="L99">                .build();</span>
+
+<span class="nc" id="L101">        } catch (Exception e) {</span>
+<span class="nc" id="L102">            return getResponseBadRequest(e);</span>
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path(&quot;/&quot;)
+    public Response selectAll() {
+<span class="fc" id="L111">        List&lt;Person&gt; persons = personService.getAll();</span>
+<span class="fc" id="L112">        List&lt;PersonDto&gt; personsToResponse = persons.stream().map(person -&gt; PersonMapper.INSTANCE.personToPersonDto(person)).collect(Collectors.toList());</span>
+
+<span class="fc" id="L114">        return Response</span>
+<span class="fc" id="L115">            .status(Response.Status.OK)</span>
+<span class="fc" id="L116">            .entity(personsToResponse)</span>
+<span class="fc" id="L117">            .build();</span>
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path(&quot;/{rut}&quot;)
+    public Response findByRut(@PathParam(&quot;rut&quot;) String rut) {
+        try {
+
+<span class="fc" id="L127">            Person person = personService.getByRut(Rut.valueOf(rut));</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">            if (person == null)</span>
+<span class="fc" id="L129">                return Response</span>
+<span class="fc" id="L130">                    .status(Response.Status.NOT_FOUND)</span>
+<span class="fc" id="L131">                    .build();</span>
+
+<span class="fc" id="L133">            PersonDto personDto = PersonMapper.INSTANCE.personToPersonDto(person);</span>
+<span class="fc" id="L134">            return Response</span>
+<span class="fc" id="L135">                .status(Response.Status.FOUND)</span>
+<span class="fc" id="L136">                .entity(personDto)</span>
+<span class="fc" id="L137">                .build();</span>
+
+<span class="nc" id="L139">        } catch (BusinessException e) {</span>
+<span class="nc" id="L140">            return getResponseBadRequest(e);</span>
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(&quot;/characters/{id}&quot;)
+    public Response findCharacter(@PathParam(&quot;id&quot;) Long idCharacter) {
+<span class="nc" id="L148">        RickAndMortyCharacter character = rickAndMortyService.getById(idCharacter);</span>
+<span class="nc" id="L149">        return Response</span>
+<span class="nc" id="L150">            .status(Response.Status.FOUND)</span>
+<span class="nc" id="L151">            .entity(character)</span>
+<span class="nc" id="L152">            .build();</span>
+    }
+
+    private static Response getResponseBadRequest(Exception exception) {
+<span class="fc" id="L156">        return Response</span>
+<span class="fc" id="L157">            .status(Response.Status.BAD_REQUEST)</span>
+<span class="fc" id="L158">            .entity(exception.getMessage())</span>
+<span class="fc" id="L159">            .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

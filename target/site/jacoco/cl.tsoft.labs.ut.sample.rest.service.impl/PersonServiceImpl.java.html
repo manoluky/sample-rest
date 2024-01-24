@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PersonServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">unit-test-sample-rest</a> &gt; <a href="index.source.html" class="el_package">cl.tsoft.labs.ut.sample.rest.service.impl</a> &gt; <span class="el_source">PersonServiceImpl.java</span></div><h1>PersonServiceImpl.java</h1><pre class="source lang-java linenums">package cl.tsoft.labs.ut.sample.rest.service.impl;
+
+import cl.tsoft.labs.ut.sample.rest.entitie.Person;
+import cl.tsoft.labs.ut.sample.rest.entitie.type.Rut;
+import cl.tsoft.labs.ut.sample.rest.service.exception.BusinessException;
+import cl.tsoft.labs.ut.sample.rest.service.repository.PersonRepository;
+import cl.tsoft.labs.ut.sample.rest.service.PersonService;
+
+import javax.ejb.Singleton;
+import javax.inject.Inject;
+import java.util.List;
+
+@Singleton
+<span class="fc" id="L14">public class PersonServiceImpl implements PersonService {</span>
+
+    @Inject
+    private PersonRepository personRepository;
+
+    @Override
+    public Person deleteById(Long id) throws BusinessException {
+
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if(id == null)</span>
+<span class="fc" id="L23">            throw new BusinessException(&quot;id of person is null&quot;);</span>
+
+<span class="fc" id="L25">        return personRepository.deleteById(id);</span>
+    }
+
+    @Override
+    public List&lt;Person&gt; getAll() {
+<span class="nc" id="L30">        return personRepository.getAll();</span>
+    }
+
+    @Override
+    public Person getByRut(Rut rut) throws BusinessException {
+
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if(rut == null)</span>
+<span class="fc" id="L37">            throw new BusinessException(&quot;rut of person is null&quot;);</span>
+
+<span class="fc" id="L39">        return personRepository.getByRut(rut);</span>
+    }
+
+    @Override
+    public Person createPerson(Person person) throws BusinessException {
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if(person == null)</span>
+<span class="fc" id="L45">            throw new BusinessException(&quot;person is null&quot;);</span>
+
+<span class="fc" id="L47">        Rut rut = person.getRut();</span>
+<span class="fc bfc" id="L48" title="All 4 branches covered.">        if(rut == null || !rut.isValid())</span>
+<span class="fc" id="L49">            throw new BusinessException(&quot;rut is null or is invalid&quot;);</span>
+
+<span class="fc bfc" id="L51" title="All 4 branches covered.">        if(person.getName() == null || person.getName().isEmpty())</span>
+<span class="fc" id="L52">            throw new BusinessException(&quot;name is null or empty&quot;);</span>
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if(personRepository.getByRut(rut) != null)</span>
+<span class="fc" id="L55">            throw new BusinessException(&quot;person with rut &quot; + rut + &quot; already exists&quot;);</span>
+
+<span class="fc" id="L57">        return personRepository.create(person);</span>
+    }
+
+    @Override
+    public Person updatePerson(Person person) throws BusinessException {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if(person == null)</span>
+<span class="nc" id="L63">            throw new BusinessException(&quot;person is null&quot;);</span>
+
+<span class="nc" id="L65">        Rut rut = person.getRut();</span>
+<span class="nc bnc" id="L66" title="All 4 branches missed.">        if(rut == null || !rut.isValid())</span>
+<span class="nc" id="L67">            throw new BusinessException(&quot;rut is null or is invalid&quot;);</span>
+
+<span class="nc bnc" id="L69" title="All 4 branches missed.">        if(person.getName() == null || person.getName().isEmpty())</span>
+<span class="nc" id="L70">            throw new BusinessException(&quot;name is null or empty&quot;);</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        if(personRepository.getByRut(person.getRut()) == null)</span>
+<span class="nc" id="L73">            throw new BusinessException(&quot;person with rut &quot; + rut + &quot; does not exist&quot;);</span>
+
+<span class="nc" id="L75">        return personRepository.update(person);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

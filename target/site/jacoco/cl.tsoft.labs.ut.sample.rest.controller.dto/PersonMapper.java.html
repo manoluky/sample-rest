@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PersonMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">unit-test-sample-rest</a> &gt; <a href="index.source.html" class="el_package">cl.tsoft.labs.ut.sample.rest.controller.dto</a> &gt; <span class="el_source">PersonMapper.java</span></div><h1>PersonMapper.java</h1><pre class="source lang-java linenums">package cl.tsoft.labs.ut.sample.rest.controller.dto;
+
+import cl.tsoft.labs.ut.sample.rest.entitie.Person;
+import cl.tsoft.labs.ut.sample.rest.entitie.type.Rut;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
+
+@Mapper
+<span class="fc" id="L11">public abstract class PersonMapper {</span>
+
+<span class="fc" id="L13">    public static PersonMapper INSTANCE = Mappers.getMapper(PersonMapper.class);</span>
+
+    @Mapping(target = &quot;fullName&quot;, expression = &quot;java(person.getName() + \&quot; \&quot; + person.getPaternalLastName() + \&quot; \&quot; + person.getMaternalLastName())&quot;)
+    @Mapping(target = &quot;rut&quot;, expression = &quot;java(person.getRut() != null ? person.getRut().toString(): null)&quot;)
+    public abstract PersonDto personToPersonDto(Person person);
+
+    @Mapping(source = &quot;fullName&quot;, target = &quot;name&quot;, qualifiedByName = &quot;fullNameToName&quot;)
+    @Mapping(source = &quot;fullName&quot;, target = &quot;paternalLastName&quot;, qualifiedByName = &quot;fullNameToPaternalLastName&quot;)
+    @Mapping(source = &quot;fullName&quot;, target = &quot;maternalLastName&quot;, qualifiedByName = &quot;fullNameToMaternalLastName&quot;)
+    @Mapping(source = &quot;rut&quot;, target = &quot;rut&quot;, qualifiedByName = &quot;rutToRut&quot;)
+    public abstract Person personDtoToPerson(PersonDto personDto);
+
+    @Named(&quot;fullNameToName&quot;)
+    String fullNameToName(String fullName) {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if(fullName == null) return null;</span>
+
+<span class="fc" id="L29">        String[] parts = fullName.split(&quot;\\s+&quot;);</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if(parts.length == 0)</span>
+<span class="nc" id="L31">            return null;</span>
+
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if(parts.length &lt;= 3)</span>
+<span class="fc" id="L34">            return parts[0];</span>
+
+<span class="fc" id="L36">        StringBuilder sb = new StringBuilder(parts[0]);</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        for(int i = 1; i &lt; parts.length - 2; i++) {</span>
+<span class="fc" id="L38">            sb.append(&quot; &quot;).append(parts[i]);</span>
+        }
+
+<span class="fc" id="L41">        return sb.toString();</span>
+    }
+
+    @Named(&quot;fullNameToPaternalLastName&quot;)
+    String fullNameToPaternalLastName(String fullName) {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if(fullName == null) return null;</span>
+
+<span class="fc" id="L48">        String[] parts = fullName.split(&quot;\\s+&quot;);</span>
+
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if(parts.length &lt;= 1)</span>
+<span class="nc" id="L51">            return null;</span>
+
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if(parts.length == 2)</span>
+<span class="fc" id="L54">            return parts[1];</span>
+
+<span class="fc" id="L56">        return parts[ parts.length - 2 ];</span>
+    }
+
+    @Named(&quot;fullNameToMaternalLastName&quot;)
+    String fullNameToMaternalLastName(String fullName) {
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if(fullName == null) return null;</span>
+
+<span class="fc" id="L63">        String[] parts = fullName.split(&quot;\\s+&quot;);</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if( parts.length &lt;= 2)</span>
+<span class="fc" id="L66">            return null;</span>
+
+<span class="fc" id="L68">        return parts[ parts.length - 1 ];</span>
+    }
+
+    @Named(&quot;rutToRut&quot;)
+    Rut rutToRut(String rut) {
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if(rut == null) return null;</span>
+<span class="fc" id="L74">        return Rut.valueOf(rut);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

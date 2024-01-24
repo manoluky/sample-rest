@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RickAndMortyServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">unit-test-sample-rest</a> &gt; <a href="index.source.html" class="el_package">cl.tsoft.labs.ut.sample.rest.service.impl</a> &gt; <span class="el_source">RickAndMortyServiceImpl.java</span></div><h1>RickAndMortyServiceImpl.java</h1><pre class="source lang-java linenums">package cl.tsoft.labs.ut.sample.rest.service.impl;
+
+import cl.tsoft.labs.ut.sample.rest.entitie.RickAndMortyCharacter;
+import cl.tsoft.labs.ut.sample.rest.service.RickAndMortyService;
+import cl.tsoft.labs.ut.sample.rest.service.config.Configuration;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.ejb.Singleton;
+import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+
+<span class="fc" id="L15">@Slf4j</span>
+@Singleton
+public class RickAndMortyServiceImpl implements RickAndMortyService {
+
+    private final Configuration properties;
+
+    @Inject
+<span class="fc" id="L22">    public RickAndMortyServiceImpl(Configuration properties) {</span>
+<span class="fc" id="L23">        this.properties = properties;</span>
+<span class="fc" id="L24">    }</span>
+
+    @Override
+    public RickAndMortyCharacter getById(Long id) {
+<span class="fc" id="L28">        String url = String.format(&quot;%s/%d&quot;, properties.getServiceUrlRickAndMortyCharacter(), id);</span>
+
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if(id == null)</span>
+<span class="nc" id="L31">            throw new IllegalArgumentException(&quot;the character id is null&quot;);</span>
+
+<span class="fc" id="L33">        Client client = ClientBuilder.newBuilder()</span>
+<span class="fc" id="L34">            .build();</span>
+
+        try {
+
+<span class="fc" id="L38">            return client</span>
+<span class="fc" id="L39">                .target(url)</span>
+<span class="fc" id="L40">                .request(MediaType.APPLICATION_JSON)</span>
+<span class="fc" id="L41">                .get(RickAndMortyCharacter.class);</span>
+
+<span class="fc" id="L43">        } catch(NotFoundException notFoundException) {</span>
+<span class="fc" id="L44">            String message = notFoundException.getResponse().readEntity(String.class);</span>
+<span class="fc" id="L45">            log.error(&quot;when character is not found un api: {}&quot;, message);</span>
+<span class="fc" id="L46">            return null;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

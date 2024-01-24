@@ -1,0 +1,12 @@
+cl\tsoft\labs\ut\sample\rest\helpers\GsonFacade.class
+cl\tsoft\labs\ut\sample\rest\controller\dto\PersonDtoTest.class
+cl\tsoft\labs\ut\sample\rest\controller\PersonControllerWithUndertowTest.class
+cl\tsoft\labs\ut\sample\rest\entitie\PersonRepositoryImplTest.class
+cl\tsoft\labs\ut\sample\rest\helpers\PersonsDummyFactory.class
+cl\tsoft\labs\ut\sample\rest\entitie\type\RutTest.class
+cl\tsoft\labs\ut\sample\rest\controller\PersonControllerWithMockTest.class
+cl\tsoft\labs\ut\sample\rest\controller\PersonControllerWithUndertowTest$MyApp.class
+cl\tsoft\labs\ut\sample\rest\controller\dto\PersonMapperTest.class
+cl\tsoft\labs\ut\sample\rest\controller\PersonControllerWithMockTest$1.class
+cl\tsoft\labs\ut\sample\rest\service\PersonServiceImplTest.class
+cl\tsoft\labs\ut\sample\rest\service\RickAndMortyServiceImplTest.class
