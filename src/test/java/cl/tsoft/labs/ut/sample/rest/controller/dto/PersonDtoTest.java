@@ -24,7 +24,7 @@ public class PersonDtoTest {
                 .build();
 
         assertNotNull(personDto);
-        assertEquals((Long) 1L , personDto.getId());
+        assertEquals((Long) 1L, personDto.getId());
         assertEquals("12345678-9", personDto.getRut());
         assertEquals("John Doe", personDto.getFullName());
         assertEquals("1990-01-01", personDto.getBirthDate());
