@@ -100,4 +100,3 @@ public class PersonDtoTest {
         assertNull(personDto.getMail());
     }
 }
-
