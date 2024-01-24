@@ -63,5 +63,41 @@ public class PersonDtoTest {
         assertNull(personDto.getCellPhone());
         assertNull(personDto.getMail());
     }
+
+    @Test
+    public void test_create_personDto_with_very_long_fullName() {
+        String longFullName = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl ac aliquam tincidunt, nunc nisl tincidunt nunc, nec lacinia nisl mi id lectus. Nulla facilisi. Sed id semper mauris. Sed nec semper nunc. Nulla facilisi. Sed id semper mauris. Sed nec semper nunc. Nulla facilisi. Sed id semper mauris. Sed nec semper nunc.";
+
+        PersonDto personDto = PersonDto.builder()
+                .fullName(longFullName)
+                .build();
+
+        assertNotNull(personDto);
+        assertNull(personDto.getId());
+        assertNull(personDto.getRut());
+        assertEquals(longFullName, personDto.getFullName());
+        assertNull(personDto.getBirthDate());
+        assertNull(personDto.getHomeAddress());
+        assertNull(personDto.getCellPhone());
+        assertNull(personDto.getMail());
+    }
+
+    @Test
+    public void create_personDto_with_very_long_fullName() {
+        String longFullName = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl ac aliquam tincidunt, nunc nisl tincidunt nunc, nec lacinia nisl mi id lectus. Nulla facilisi. Sed id semper mauris. Sed nec semper nunc. Nulla facilisi. Sed id semper mauris. Sed nec semper nunc. Nulla facilisi. Sed id semper mauris. Sed nec semper nunc.";
+
+        PersonDto personDto = PersonDto.builder()
+                .fullName(longFullName)
+                .build();
+
+        assertNotNull(personDto);
+        assertNull(personDto.getId());
+        assertNull(personDto.getRut());
+        assertEquals(longFullName, personDto.getFullName());
+        assertNull(personDto.getBirthDate());
+        assertNull(personDto.getHomeAddress());
+        assertNull(personDto.getCellPhone());
+        assertNull(personDto.getMail());
+    }
 }
 
